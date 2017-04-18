@@ -16,8 +16,8 @@ type ProxyConnect struct {
 	serversMutex      sync.RWMutex
 	localPlayers      map[string]uuid.UUID
 	localPlayersMutex sync.RWMutex
-	players           uint16
-	maxPlayers        uint16
+	players           uint32
+	maxPlayers        uint32
 }
 
 func NewProxyConnect(addr *string, user *string, pass *string, proxy *ProxyConfig, done chan bool) (this *ProxyConnect) {
@@ -139,12 +139,12 @@ func (this *ProxyConnect) HasServer(name string) (val bool) {
 	return
 }
 
-func (this *ProxyConnect) Players() (val uint16) {
+func (this *ProxyConnect) Players() (val uint32) {
 	val = this.players
 	return
 }
 
-func (this *ProxyConnect) MaxPlayers() (val uint16) {
+func (this *ProxyConnect) MaxPlayers() (val uint32) {
 	val = this.maxPlayers
 	return
 }

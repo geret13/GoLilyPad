@@ -10,10 +10,10 @@ type RequestAsProxy struct {
 	Port       uint16
 	Motd       string
 	Version    string
-	MaxPlayers uint16
+	MaxPlayers uint32
 }
 
-func NewRequestAsProxy(address string, port uint16, motd string, version string, maxPlayers uint16) (this *RequestAsProxy) {
+func NewRequestAsProxy(address string, port uint16, motd string, version string, maxPlayers uint32) (this *RequestAsProxy) {
 	this = new(RequestAsProxy)
 	this.Address = address
 	this.Port = port
@@ -48,7 +48,7 @@ func (this *requestAsProxyCodec) Decode(reader io.Reader) (request Request, err 
 	if err != nil {
 		return
 	}
-	requestAsProxy.MaxPlayers, err = packet.ReadUint16(reader)
+	requestAsProxy.MaxPlayers, err = packet.ReadUint32(reader)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (this *requestAsProxyCodec) Encode(writer io.Writer, request Request) (err 
 	if err != nil {
 		return
 	}
-	err = packet.WriteUint16(writer, requestAsProxy.MaxPlayers)
+	err = packet.WriteUint32(writer, requestAsProxy.MaxPlayers)
 	return
 }
 

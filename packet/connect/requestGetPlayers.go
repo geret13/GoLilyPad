@@ -45,12 +45,12 @@ func (this *requestGetPlayersCodec) Encode(writer io.Writer, request Request) (e
 
 type ResultGetPlayers struct {
 	List           bool
-	CurrentPlayers uint16
-	MaxPlayers     uint16
+	CurrentPlayers uint32
+	MaxPlayers     uint32
 	Players        []string
 }
 
-func NewResultGetPlayers(currentPlayers uint16, maxPlayers uint16) (this *ResultGetPlayers) {
+func NewResultGetPlayers(currentPlayers uint32, maxPlayers uint32) (this *ResultGetPlayers) {
 	this = new(ResultGetPlayers)
 	this.List = false
 	this.CurrentPlayers = currentPlayers
@@ -58,7 +58,7 @@ func NewResultGetPlayers(currentPlayers uint16, maxPlayers uint16) (this *Result
 	return
 }
 
-func NewResultGetPlayersList(currentPlayers uint16, maxPlayers uint16, players []string) (this *ResultGetPlayers) {
+func NewResultGetPlayersList(currentPlayers uint32, maxPlayers uint32, players []string) (this *ResultGetPlayers) {
 	this = new(ResultGetPlayers)
 	this.List = true
 	this.CurrentPlayers = currentPlayers
@@ -80,17 +80,17 @@ func (this *resultGetPlayersCodec) Decode(reader io.Reader) (result Result, err 
 	if err != nil {
 		return
 	}
-	resultGetPlayers.CurrentPlayers, err = packet.ReadUint16(reader)
+	resultGetPlayers.CurrentPlayers, err = packet.ReadUint32(reader)
 	if err != nil {
 		return
 	}
-	resultGetPlayers.MaxPlayers, err = packet.ReadUint16(reader)
+	resultGetPlayers.MaxPlayers, err = packet.ReadUint32(reader)
 	if err != nil {
 		return
 	}
 	if resultGetPlayers.List {
 		resultGetPlayers.Players = make([]string, resultGetPlayers.CurrentPlayers)
-		var i uint16
+		var i uint32
 		for i = 0; i < resultGetPlayers.CurrentPlayers; i++ {
 			if err != nil {
 				return
@@ -108,13 +108,13 @@ func (this *resultGetPlayersCodec) Encode(writer io.Writer, result Result) (err 
 	if err != nil {
 		return
 	}
-	err = packet.WriteUint16(writer, resultGetPlayers.CurrentPlayers)
+	err = packet.WriteUint32(writer, resultGetPlayers.CurrentPlayers)
 	if err != nil {
 		return
 	}
-	err = packet.WriteUint16(writer, resultGetPlayers.MaxPlayers)
+	err = packet.WriteUint32(writer, resultGetPlayers.MaxPlayers)
 	if resultGetPlayers.List {
-		var i uint16
+		var i uint32
 		for i = 0; i < resultGetPlayers.CurrentPlayers; i++ {
 			if err != nil {
 				return

@@ -13,12 +13,12 @@ type NetworkCache struct {
 	ports              []uint16
 	motds              []string
 	versions           []string
-	maxPlayers         []uint16
+	maxPlayers         []uint32
 	shownAddress       string
 	shownPort          uint16
 	shownMotd          string
 	shownVersion       string
-	shownMaxPlayers    uint16
+	shownMaxPlayers    uint32
 	rebuildLock        sync.RWMutex
 }
 
@@ -30,7 +30,7 @@ func NewNetworkCache() (this *NetworkCache) {
 	this.ports = make([]uint16, 0)
 	this.motds = make([]string, 0)
 	this.versions = make([]string, 0)
-	this.maxPlayers = make([]uint16, 0)
+	this.maxPlayers = make([]uint32, 0)
 	return
 }
 
@@ -187,7 +187,7 @@ func (this *NetworkCache) Version() (val string) {
 	return
 }
 
-func (this *NetworkCache) MaxPlayers() (val uint16) {
+func (this *NetworkCache) MaxPlayers() (val uint32) {
 	this.rebuildLock.RLock()
 	val = this.shownMaxPlayers
 	this.rebuildLock.RUnlock()

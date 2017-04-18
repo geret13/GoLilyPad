@@ -28,7 +28,7 @@ type Session struct {
 	proxyMotd         string
 	proxyVersion      string
 	proxyPlayers      map[string]uuid.UUID
-	proxyMaxPlayers   uint16
+	proxyMaxPlayers   uint32
 
 	remoteIp   string
 	remotePort string
@@ -77,7 +77,7 @@ func (this *Session) RegisterAuthorized(username string) {
 	this.server.SessionRegistry(ROLE_AUTHORIZED).Register(this)
 }
 
-func (this *Session) RegisterProxy(address string, port uint16, motd string, version string, maxPlayers uint16) (ok bool) {
+func (this *Session) RegisterProxy(address string, port uint16, motd string, version string, maxPlayers uint32) (ok bool) {
 	sessionRegistry := this.server.SessionRegistry(ROLE_AUTHORIZED)
 	if sessionRegistry.HasId(this.username) {
 		ok = false
@@ -223,9 +223,9 @@ func (this *Session) HandlePacket(packet packet.Packet) (err error) {
 			if this.Authorized() {
 				players := this.server.networkCache.Players()
 				if request.(*connect.RequestGetPlayers).List {
-					result = connect.NewResultGetPlayersList(uint16(len(players)), this.server.networkCache.MaxPlayers(), players)
+					result = connect.NewResultGetPlayersList(uint32(len(players)), this.server.networkCache.MaxPlayers(), players)
 				} else {
-					result = connect.NewResultGetPlayers(uint16(len(players)), this.server.networkCache.MaxPlayers())
+					result = connect.NewResultGetPlayers(uint32(len(players)), this.server.networkCache.MaxPlayers())
 				}
 				statusCode = connect.STATUS_SUCCESS
 			} else {
